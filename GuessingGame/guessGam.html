@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guess the Number Game</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #131111;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .container {
+        text-align: center;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(37, 231, 12, 0.1);
+    }
+    h1 {
+        margin-bottom: 20px;
+    }
+    input[type="number"] {
+        padding: 10px;
+        margin-right: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+    button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    #feedback {
+        margin-top: 20px;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Guess the Number Game</h1>
+    <input type="number" id="userGuess" placeholder="Enter your guess">
+    <button onclick="guessNumber()">Guess</button>
+    <div id="feedback"></div>
+</div>
+
+<script>
+    function guessNumber() {
+        var randomNumber = Math.floor(Math.random() * 10) + 1;
+        var userGuess = parseInt(document.getElementById('userGuess').value);
+        var feedbackDiv = document.getElementById('feedback');
+
+        if (userGuess === randomNumber) {
+            feedbackDiv.innerHTML = "<p>Congratulations! You guessed the correct number!</p>";
+        } else {
+            var message = "Sorry, that's not correct.";
+            if (userGuess > randomNumber) {
+                message += " Your guess is too high.";
+            } else {
+                message += " Your guess is too low.";
+            }
+            feedbackDiv.innerHTML = "<p>" + message + "</p>";
+        }
+    }
+</script>
+
+</body>
+</html>
