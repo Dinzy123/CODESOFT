@@ -41,7 +41,7 @@
         border-radius: 4px;
     }
     .recommend-button {
-        background-color: #4CAF50; /* Green */
+        background-color: #4CAF50; 
         border: none;
         color: white;
         padding: 8px 16px;
@@ -87,10 +87,10 @@
     const recommendationsDiv = document.getElementById('recommendations');
     const recommendedList = document.getElementById('recommendedList');
 
-    // Retrieve recommended books from local storage or initialize an empty object
+    
     let recommendedBooks = JSON.parse(localStorage.getItem('recommendedBooks')) || {};
 
-    // Display recommendations stored in local storage
+    
     displayRecommendedBooks();
 
     bookInput.addEventListener('input', function() {
