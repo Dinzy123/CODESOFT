@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Recommendation System</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #020000;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 800px;
+        color: #ccc;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #3309f1;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(248, 1, 1, 0.1);
+    }
+    h1, h2 {
+        text-align: center;
+    }
+    #bookInput {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    #recommendations {
+        margin-top: 20px;
+    }
+    .book {
+        padding: 10px;
+        margin-bottom: 5px;
+        background-color: #102c30;
+        border: 1px solid #0ddb63;
+        border-radius: 4px;
+    }
+    .recommend-button {
+        background-color: #4CAF50; /* Green */
+        border: none;
+        color: white;
+        padding: 8px 16px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin-left: 10px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .recommended-books {
+        margin-top: 20px;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Book Recommendation System</h1>
+    <input type="text" id="bookInput" placeholder="Enter your favorite book...">
+    <div id="recommendations"></div>
+    <div class="recommended-books" id="recommendedBooks">
+        <h2>Your Recommendations</h2>
+        <ul id="recommendedList"></ul>
+    </div>
+</div>
+
+<script>
+    const books = [
+        { title: "To Kill a Mockingbird", author: "Harper Lee", genre: "Fiction" },
+        { title: "1984", author: "George Orwell", genre: "Science Fiction" },
+        { title: "Pride and Prejudice", author: "Jane Austen", genre: "Romance" },
+        { title: "The Great Gatsby", author: "F. Scott Fitzgerald", genre: "Fiction" },
+        { title: "The Catcher in the Rye", author: "J.D. Salinger", genre: "Fiction" },
+        { title: "The Hobbit", author: "J.R.R. Tolkien", genre: "Fantasy" },
+        { title: "Harry Potter and the Philosopher's Stone", author: "J.K. Rowling", genre: "Fantasy" },
+        { title: "The Hunger Games", author: "Suzanne Collins", genre: "Science Fiction" },
+        { title: "The Da Vinci Code", author: "Dan Brown", genre: "Thriller" },
+        { title: "Gone Girl", author: "Gillian Flynn", genre: "Thriller" }
+    ];
+
+    const bookInput = document.getElementById('bookInput');
+    const recommendationsDiv = document.getElementById('recommendations');
+    const recommendedList = document.getElementById('recommendedList');
+
+    // Retrieve recommended books from local storage or initialize an empty object
+    let recommendedBooks = JSON.parse(localStorage.getItem('recommendedBooks')) || {};
+
+    // Display recommendations stored in local storage
+    displayRecommendedBooks();
+
+    bookInput.addEventListener('input', function() {
+        const query = bookInput.value.trim().toLowerCase();
+        const filteredBooks = books.filter(book =>
+            book.title.toLowerCase().includes(query) ||
+            book.author.toLowerCase().includes(query) ||
+            book.genre.toLowerCase().includes(query)
+        );
+
+        showRecommendations(filteredBooks);
+    });
+
+    function showRecommendations(filteredBooks) {
+        recommendationsDiv.innerHTML = '';
+        if (filteredBooks.length === 0) {
+            recommendationsDiv.innerHTML = '<p>No recommendations found.</p>';
+            return;
+        }
+
+        filteredBooks.forEach(book => {
+            const bookDiv = document.createElement('div');
+            bookDiv.classList.add('book');
+            bookDiv.innerHTML = `
+                <strong>Title:</strong> ${book.title}<br>
+                <strong>Author:</strong> ${book.author}<br>
+                <strong>Genre:</strong> ${book.genre}
+            `;
+            const recommendButton = document.createElement('button');
+            recommendButton.classList.add('recommend-button');
+            const recommendationCount = recommendedBooks[book.title] || 0;
+            recommendButton.textContent = `Recommend (${recommendationCount})`;
+            recommendButton.addEventListener('click', function() {
+                recommendBook(book.title);
+            });
+            bookDiv.appendChild(recommendButton);
+            recommendationsDiv.appendChild(bookDiv);
+        });
+    }
+
+    function recommendBook(bookTitle) {
+        recommendedBooks[bookTitle] = (recommendedBooks[bookTitle] || 0) + 1;
+        localStorage.setItem('recommendedBooks', JSON.stringify(recommendedBooks));
+        displayRecommendedBooks();
+    }
+
+    function displayRecommendedBooks() {
+        recommendedList.innerHTML = '';
+        for (const [title, count] of Object.entries(recommendedBooks)) {
+            if (typeof title !== 'object' && typeof count !== 'object') {
+                const li = document.createElement('li');
+                li.textContent = `${title} - Recommended ${count} times`;
+                recommendedList.appendChild(li);
+            }
+        }
+    }
+</script>
+</body>
+</html>
